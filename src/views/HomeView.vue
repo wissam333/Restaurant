@@ -28,8 +28,10 @@ onMounted(() => {
   const slider = document.querySelector(".slider");
   const wrapper = document.querySelector(".wrapper");
 
-  const image1List = document.querySelectorAll(".image1");
-  const image2List = document.querySelectorAll(".image2");
+  const image1List: NodeListOf<HTMLImageElement> =
+    document.querySelectorAll(".image1");
+  const image2List: NodeListOf<HTMLImageElement> =
+    document.querySelectorAll(".image2");
 
   if (wrapper && slider) {
     wrapper.addEventListener("scroll", () => {
@@ -76,7 +78,7 @@ onMounted(() => {
               @click="active = 'Burger'"
               :class="active == 'Burger' ? 'active' : ''"
             >
-              <img src="../assets/pngwing.com(1).png" alt="" />
+              <img src="../assets/pngwing.com(1).webp" alt="" />
               <p>Burger</p>
             </div>
           </swiper-slide>
@@ -86,7 +88,7 @@ onMounted(() => {
               @click="active = 'Pizza'"
               :class="active == 'Pizza' ? 'active' : ''"
             >
-              <img src="../assets/pngwing.com(6).png" alt="" />
+              <img src="../assets/pngwing.com(6).webp" alt="" />
               <p>Pizza</p>
             </div>
           </swiper-slide>
@@ -96,7 +98,7 @@ onMounted(() => {
               @click="active = 'Others'"
               :class="active == 'Others' ? 'active' : ''"
             >
-              <img src="../assets/menu-item-1.png" alt="" />
+              <img src="../assets/menu-item-1.webp" alt="" />
               <p>Others</p>
             </div>
           </swiper-slide>
@@ -118,7 +120,7 @@ onMounted(() => {
                 <div class="badge bg-danger">$10.90</div>
               </div>
               <div class="food-img">
-                <img src="../assets/pngwing.com(2).png" alt="" />
+                <img src="../assets/pngwing.com(2).webp" alt="" />
               </div>
             </div>
           </div>
@@ -135,7 +137,7 @@ onMounted(() => {
                 <div class="badge bg-danger">$10.90</div>
               </div>
               <div class="food-img">
-                <img src="../assets/pngwing.com(4).png" alt="" />
+                <img src="../assets/pngwing.com(4).webp" alt="" />
               </div>
             </div>
           </div>
@@ -152,7 +154,7 @@ onMounted(() => {
                 <div class="badge bg-danger">$10.90</div>
               </div>
               <div class="food-img">
-                <img src="../assets/pngwing.com(3).png" alt="" />
+                <img src="../assets/pngwing.com(3).webp" alt="" />
               </div>
             </div>
           </div>
@@ -169,7 +171,7 @@ onMounted(() => {
                 <div class="badge bg-danger">$10.90</div>
               </div>
               <div class="food-img">
-                <img src="../assets/pngwing.com(2).png" alt="" />
+                <img src="../assets/pngwing.com(2).webp" alt="" />
               </div>
             </div>
           </div>
@@ -186,7 +188,7 @@ onMounted(() => {
                 <div class="badge bg-danger">$10.90</div>
               </div>
               <div class="food-img">
-                <img src="../assets/pngwing.com(1).png" alt="" />
+                <img src="../assets/pngwing.com(1).webp" alt="" />
               </div>
             </div>
           </div>
@@ -203,7 +205,7 @@ onMounted(() => {
                 <div class="badge bg-danger">$10.90</div>
               </div>
               <div class="food-img">
-                <img src="../assets/pngwing.com(3).png" alt="" />
+                <img src="../assets/pngwing.com(3).webp" alt="" />
               </div>
             </div>
           </div>
@@ -222,7 +224,7 @@ onMounted(() => {
                   <div class="badge bg-danger">$10.90</div>
                 </div>
                 <div class="food-img">
-                  <img src="../assets/pngwing.com(6).png" alt="" />
+                  <img src="../assets/pngwing.com(6).webp" alt="" />
                 </div>
               </div>
             </div>
@@ -239,7 +241,7 @@ onMounted(() => {
                   <div class="badge bg-danger">$10.90</div>
                 </div>
                 <div class="food-img">
-                  <img src="../assets/pngwing.com(7).png" alt="" />
+                  <img src="../assets/pngwing.com(7).webp" alt="" />
                 </div>
               </div>
             </div>
@@ -256,7 +258,7 @@ onMounted(() => {
                   <div class="badge bg-danger">$10.90</div>
                 </div>
                 <div class="food-img">
-                  <img src="../assets/pngwing.com(8).png" alt="" />
+                  <img src="../assets/pngwing.com(8).webp" alt="" />
                 </div>
               </div>
             </div>
@@ -273,7 +275,7 @@ onMounted(() => {
                   <div class="badge bg-danger">$10.90</div>
                 </div>
                 <div class="food-img">
-                  <img src="../assets/pngwing.com(10).png" alt="" />
+                  <img src="../assets/pngwing.com(10).webp" alt="" />
                 </div>
               </div>
             </div>
@@ -290,7 +292,7 @@ onMounted(() => {
                   <div class="badge bg-danger">$10.90</div>
                 </div>
                 <div class="food-img">
-                  <img src="../assets/pngwing.com(6).png" alt="" />
+                  <img src="../assets/pngwing.com(6).webp" alt="" />
                 </div>
               </div>
             </div>
@@ -307,7 +309,7 @@ onMounted(() => {
                   <div class="badge bg-danger">$10.90</div>
                 </div>
                 <div class="food-img">
-                  <img src="../assets/pngwing.com(7).png" alt="" />
+                  <img src="../assets/pngwing.com(7).webp" alt="" />
                 </div>
               </div>
             </div>
@@ -317,25 +319,25 @@ onMounted(() => {
       <img
         :class="active == 'Burger' ? 'show' : 'hide'"
         class="image1"
-        src="../assets/pngwing.com(1).png"
+        src="../assets/pngwing.com(1).webp"
         alt=""
       />
       <img
         :class="active == 'Burger' ? 'show' : 'hide'"
         class="image2"
-        src="../assets/pngwing.com(2).png"
+        src="../assets/pngwing.com(2).webp"
         alt=""
       />
       <img
         :class="active == 'Pizza' ? 'show' : 'hide'"
         class="image1"
-        src="../assets/pngwing.com(10).png"
+        src="../assets/pngwing.com(10).webp"
         alt=""
       />
       <img
         :class="active == 'Pizza' ? 'show' : 'hide'"
         class="image2"
-        src="../assets/pngwing.com(8).png"
+        src="../assets/pngwing.com(8).webp"
         alt=""
       />
     </div>
