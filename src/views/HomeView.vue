@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { ref, defineComponent, onMounted, watchEffect } from "vue";
+import { ref, defineComponent, onMounted, computed } from "vue";
+//data
+import fakeData from "../Data/MOCK_DATA.json";
+//router
+import { useRouter } from "vue-router";
 // Import Swiper
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
@@ -21,12 +25,39 @@ const breakpoints = ref({
     },
   },
 });
+
 //active section
 let active = ref("Burger");
 
+//data Pizza Burger
+let Burgers = computed(() => {
+  return fakeData.filter((item) => {
+    if (item.Name.includes("Burger")) {
+      return item;
+    }
+  });
+});
+let Pizzas = computed(() => {
+  return fakeData.filter((item) => {
+    if (item.Name.includes("Pizza")) {
+      return item;
+    }
+  });
+});
+
 onMounted(() => {
-  const slider = document.querySelector(".slider");
-  const wrapper = document.querySelector(".wrapper");
+  // return images to its normal size
+  const image: NodeListOf<HTMLImageElement> =
+    document.querySelectorAll(".food-img");
+  const home = document.querySelector(".home-wrapper") as HTMLElement;
+  home.style.opacity = `1`;
+  image.forEach((element) => {
+    element.style.animation = "";
+    element.style.transform = "";
+  });
+
+  const slider = document.querySelector(".slider") as HTMLElement;
+  const wrapper = document.querySelector(".wrapper") as HTMLElement;
 
   const image1List: NodeListOf<HTMLImageElement> =
     document.querySelectorAll(".image1");
@@ -35,6 +66,10 @@ onMounted(() => {
 
   if (wrapper && slider) {
     wrapper.addEventListener("scroll", () => {
+      //slider fade in/out
+      // slider.style.height = `${256 - wrapper.scrollTop}px`;
+      slider.style.transform = `translate(0px, ${wrapper.scrollTop}px)`;
+      slider.style.opacity = `${(256 - wrapper.scrollTop) / 256}`;
       //spin images
       image1List.forEach((image1) => {
         image1.style.transform = `rotate(${wrapper.scrollTop / 2}deg)`;
@@ -42,19 +77,20 @@ onMounted(() => {
       image2List.forEach((image2) => {
         image2.style.transform = `rotate(${wrapper.scrollTop / 2}deg)`;
       });
-      //slider fade-out
-      if (wrapper.scrollTop > 0) {
-        // Scrolling of the .wrapper element has begun
-        slider.classList.add("fade-out");
-        slider.classList.remove("fade-in");
-      } else {
-        // Scrolling of the .wrapper element has not yet begun
-        slider.classList.add("fade-in");
-        slider.classList.remove("fade-out");
-      }
     });
   }
 });
+
+const router = useRouter();
+const goToItem = (event: { currentTarget: any }, Id: any) => {
+  const foodCard = event.currentTarget;
+  const image = foodCard.querySelector(".food-img") as HTMLElement;
+  const home = document.querySelector(".home-wrapper") as HTMLElement;
+  home.style.opacity = `0.5`;
+  image.style.animation = `goToItem 0.4s linear forwards`;
+  image.style.transform = `translate(-40%,-40%) scale(1.4)`;
+  router.push({ name: "Item", params: { id: Id } });
+};
 </script>
 <template>
   <div class="home-wrapper">
@@ -108,208 +144,44 @@ onMounted(() => {
       <div class="container-fluid">
         <div class="food">
           <div
+            v-for="Burger in Burgers"
             class="food-cards Burger"
             :class="active == 'Burger' ? 'show' : 'hide'"
+            @click="goToItem($event, Burger.id)"
           >
             <div class="card">
               <div class="food-info">
                 <div class="content">
-                  <i class="bi bi-star-fill"></i>
-                  <div class="info">Double Cheese & Meat</div>
+                  <i v-if="Burger.star" class="bi bi-star-fill"></i>
+                  <div class="info">{{ Burger.Name }}</div>
                 </div>
-                <div class="badge bg-danger">$10.90</div>
+                <div class="badge bg-danger">${{ Burger.Price }}</div>
               </div>
               <div class="food-img">
-                <img src="../assets/pngwing.com(2).webp" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="food-cards Burger"
-            :class="active == 'Burger' ? 'show' : 'hide'"
-          >
-            <div class="card">
-              <div class="food-info">
-                <div class="content">
-                  <div class="info">Double Cheese & Meat</div>
-                </div>
-                <div class="badge bg-danger">$10.90</div>
-              </div>
-              <div class="food-img">
-                <img src="../assets/pngwing.com(4).webp" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="food-cards Burger"
-            :class="active == 'Burger' ? 'show' : 'hide'"
-          >
-            <div class="card">
-              <div class="food-info">
-                <div class="content">
-                  <div class="info">Double Cheese & Meat</div>
-                </div>
-                <div class="badge bg-danger">$10.90</div>
-              </div>
-              <div class="food-img">
-                <img src="../assets/pngwing.com(3).webp" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="food-cards Burger"
-            :class="active == 'Burger' ? 'show' : 'hide'"
-          >
-            <div class="card">
-              <div class="food-info">
-                <div class="content">
-                  <div class="info">Double Cheese & Meat</div>
-                </div>
-                <div class="badge bg-danger">$10.90</div>
-              </div>
-              <div class="food-img">
-                <img src="../assets/pngwing.com(2).webp" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="food-cards Burger"
-            :class="active == 'Burger' ? 'show' : 'hide'"
-          >
-            <div class="card">
-              <div class="food-info">
-                <div class="content">
-                  <div class="info">Double Cheese & Meat</div>
-                </div>
-                <div class="badge bg-danger">$10.90</div>
-              </div>
-              <div class="food-img">
+                <!-- <img :src="Burger.image" alt="" /> -->
                 <img src="../assets/pngwing.com(1).webp" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="food-cards Burger"
-            :class="active == 'Burger' ? 'show' : 'hide'"
-          >
-            <div class="card">
-              <div class="food-info">
-                <div class="content">
-                  <div class="info">Double Cheese & Meat</div>
-                </div>
-                <div class="badge bg-danger">$10.90</div>
-              </div>
-              <div class="food-img">
-                <img src="../assets/pngwing.com(3).webp" alt="" />
               </div>
             </div>
           </div>
 
           <div class="Pizza-container">
             <div
+              v-for="Pizza in Pizzas"
               class="food-cards Pizza"
               :class="active == 'Pizza' ? 'show' : 'hide'"
+              @click="goToItem($event, Pizza.id)"
             >
               <div class="card">
                 <div class="food-info">
                   <div class="content">
-                    <i class="bi bi-star-fill"></i>
-                    <div class="info">Double Cheese & Meat</div>
+                    <i v-if="Pizza.star" class="bi bi-star-fill"></i>
+                    <div class="info">{{ Pizza.Name }}</div>
                   </div>
-                  <div class="badge bg-danger">$10.90</div>
+                  <div class="badge bg-danger">${{ Pizza.Price }}</div>
                 </div>
                 <div class="food-img">
-                  <img src="../assets/pngwing.com(6).webp" alt="" />
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="food-cards Pizza"
-              :class="active == 'Pizza' ? 'show' : 'hide'"
-            >
-              <div class="card">
-                <div class="food-info">
-                  <div class="content">
-                    <div class="info">Double Cheese & Meat</div>
-                  </div>
-                  <div class="badge bg-danger">$10.90</div>
-                </div>
-                <div class="food-img">
-                  <img src="../assets/pngwing.com(7).webp" alt="" />
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="food-cards Pizza"
-              :class="active == 'Pizza' ? 'show' : 'hide'"
-            >
-              <div class="card">
-                <div class="food-info">
-                  <div class="content">
-                    <div class="info">Double Cheese & Meat</div>
-                  </div>
-                  <div class="badge bg-danger">$10.90</div>
-                </div>
-                <div class="food-img">
-                  <img src="../assets/pngwing.com(8).webp" alt="" />
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="food-cards Pizza"
-              :class="active == 'Pizza' ? 'show' : 'hide'"
-            >
-              <div class="card">
-                <div class="food-info">
-                  <div class="content">
-                    <div class="info">Double Cheese & Meat</div>
-                  </div>
-                  <div class="badge bg-danger">$10.90</div>
-                </div>
-                <div class="food-img">
+                  <!-- <img :src="Pizza.image" alt="" /> -->
                   <img src="../assets/pngwing.com(10).webp" alt="" />
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="food-cards Pizza"
-              :class="active == 'Pizza' ? 'show' : 'hide'"
-            >
-              <div class="card">
-                <div class="food-info">
-                  <div class="content">
-                    <div class="info">Double Cheese & Meat</div>
-                  </div>
-                  <div class="badge bg-danger">$10.90</div>
-                </div>
-                <div class="food-img">
-                  <img src="../assets/pngwing.com(6).webp" alt="" />
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="food-cards Pizza"
-              :class="active == 'Pizza' ? 'show' : 'hide'"
-            >
-              <div class="card">
-                <div class="food-info">
-                  <div class="content">
-                    <div class="info">Double Cheese & Meat</div>
-                  </div>
-                  <div class="badge bg-danger">$10.90</div>
-                </div>
-                <div class="food-img">
-                  <img src="../assets/pngwing.com(7).webp" alt="" />
                 </div>
               </div>
             </div>
@@ -345,43 +217,10 @@ onMounted(() => {
 </template>
 <style lang="scss" scoped>
 @import "../assets/var.scss";
-.slider.fade-out {
-  animation: fade-out 0.5s linear forwards;
-  @keyframes fade-out {
-    0% {
-      opacity: 1;
-      height: 226px;
-    }
-    50% {
-      opacity: 0.5;
-      height: calc(226px / 2);
-    }
-    100% {
-      opacity: 0;
-      height: 0;
-    }
-  }
-}
-.slider.fade-in {
-  animation: fade-in 0.5s linear forwards;
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-      height: 0;
-    }
-    50% {
-      opacity: 0.5;
-      height: calc(226px / 2);
-    }
-    100% {
-      opacity: 1;
-      height: 226px;
-    }
-  }
-}
 .home-wrapper {
   overflow: hidden;
   height: calc(100vh - 81px);
+  transition: all 0.4s linear;
   .home {
     padding: 0 10px 10px 10px;
     .Welcom {
@@ -395,11 +234,14 @@ onMounted(() => {
   .wrapper {
     position: relative;
     overflow-y: scroll;
+    width: 100vw;
+    overflow-x: hidden;
     max-height: calc(100vh - 169px);
     .slider {
       width: 100%;
       padding-right: 0;
       margin-bottom: 0px;
+      transition: all 0.1s linear;
       .swiper {
         padding: 0 10px 10px 10px;
         .item {
@@ -420,7 +262,7 @@ onMounted(() => {
               background-color: #fe746aed;
               box-shadow: 0px 0px 14px 0px #fe746a;
               p {
-                color: #fff;
+                color: #fff !important;
               }
             }
 
@@ -440,7 +282,7 @@ onMounted(() => {
         font-size: 14px;
         margin-top: 15px;
         font-weight: 500;
-        margin-bottom: 30px;
+        padding-bottom: 30px;
         span {
           color: $mainColor;
         }
@@ -448,10 +290,10 @@ onMounted(() => {
     }
     .food {
       position: relative;
-      padding-top: 40px;
       .Pizza-container {
         position: absolute;
-        top: 40px; //food padding-top
+        top: 0px; //food padding-top
+        height: 0;
       }
       .food-cards {
         padding: 0 10px 10px 10px;
@@ -521,6 +363,17 @@ onMounted(() => {
           .food-img {
             width: 50%;
             height: auto;
+            transition: transform 0.4s linear;
+            mix-blend-mode: darken;
+            z-index: 10;
+            @keyframes goToItem {
+              0% {
+                opacity: 0.2;
+              }
+              100% {
+                opacity: 0.5;
+              }
+            }
             img {
               max-width: 100%;
               max-height: 100%;
