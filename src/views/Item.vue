@@ -9,6 +9,7 @@ import fakeData from "../Data/MOCK_DATA.json";
 // Import Swiper
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
+import router from "@/router";
 // swiper configuration
 defineComponent({
   name: "BreakPoints",
@@ -42,22 +43,134 @@ const toggleCheck = (event: any) => {
   const check = event.currentTarget.querySelector(".check");
   check.style.display = check.style.display === "none" ? "flex" : "none";
 };
-
+//Order Done
+const order = () => {
+  const item = document.querySelector(".item") as HTMLElement;
+  const fadeContainer = document.querySelector(
+    ".fade-container"
+  ) as HTMLElement;
+  item.style.opacity = "0";
+  fadeContainer.style.opacity = "1";
+};
+//init AOS and qty management
+let qty = ref(1);
 onMounted(() => {
   AOS.init();
 });
 </script>
 <template>
-  <div class="item container" v-for="SingleItem in Item">
-    <h2 class="text-center" data-aos="fade-up" data-aos-duration="700">
-      {{ SingleItem.Name }}
-    </h2>
-    <p class="text-center" data-aos="fade-up" data-aos-duration="700">
-      Lorem ipsum dolor sit amet consectetur adipisicing elitoluptatem.
-    </p>
-    <div class="wrapper">
-      <div class="item-img">
-        <!-- <img :src="SingleItem.image" alt="" /> -->
+  <transition name="fade" appear>
+    <div>
+      <div class="item container" v-for="SingleItem in Item">
+        <h2 class="text-center" data-aos="fade-up" data-aos-duration="700">
+          {{ SingleItem.Name }}
+        </h2>
+        <p class="text-center" data-aos="fade-up" data-aos-duration="700">
+          Lorem ipsum dolor sit amet consectetur adipisicing elitoluptatem.
+        </p>
+        <div class="wrapper">
+          <div class="item-img">
+            <!-- <img :src="SingleItem.image" alt="" /> -->
+            <img
+              v-if="SingleItem.Name.includes('Burger')"
+              src="../assets/pngwing.com(1).webp"
+              alt=""
+            />
+            <img
+              v-if="SingleItem.Name.includes('Pizza')"
+              src="../assets/pngwing.com(6).webp"
+              alt=""
+            />
+            <span
+              v-if="SingleItem.star"
+              class="star"
+              data-aos="fade-left"
+              data-aos-duration="1000"
+            >
+              <i class="bi bi-star-fill"></i>
+            </span>
+            <div
+              class="qty-input"
+              data-aos="fade-left"
+              data-aos-duration="1000"
+            >
+              <button
+                class="qty-count qty-count--minus"
+                type="button"
+                @click="qty > 1 ? (qty -= 1) : (qty = qty)"
+              >
+                -
+              </button>
+              <input
+                class="product-qty"
+                type="number"
+                name="product-qty"
+                :value="qty"
+              />
+              <button
+                class="qty-count qty-count--add"
+                type="button"
+                @click="qty += 1"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+        <h5>Extras</h5>
+        <div data-aos="fade-left" data-aos-duration="1000">
+          <swiper
+            :breakpoints="breakpoints.swiperOptions.breakpoints"
+            :space-between="20"
+            v-if="breakpoints"
+            class="slider"
+          >
+            <swiper-slide class="addons" @click="toggleCheck">
+              <div class="addons-card">
+                <img src="../assets/katchap.png" alt="" />
+                <p>Extra Katchap</p>
+                <span class="check">
+                  <i class="bi bi-check-lg"></i>
+                </span>
+              </div>
+            </swiper-slide>
+            <swiper-slide class="addons" @click="toggleCheck">
+              <div class="addons-card">
+                <img src="../assets/cheese.png" alt="" />
+                <p>Extra Cheese</p>
+                <span class="check">
+                  <i class="bi bi-check-lg"></i>
+                </span>
+              </div>
+            </swiper-slide>
+            <swiper-slide class="addons">
+              <div class="addons-card" @click="toggleCheck">
+                <img src="../assets/cheese.png" alt="" />
+                <p>Extra Cheese</p>
+                <span class="check">
+                  <i class="bi bi-check-lg"></i>
+                </span>
+              </div>
+            </swiper-slide>
+          </swiper>
+        </div>
+        <div data-aos-offset="0" data-aos="fade-up" data-aos-duration="1000">
+          <div class="add-to-cart">
+            <h1><span>$</span>{{ SingleItem.Price }}</h1>
+            <button @click="order">
+              <i class="bi bi-cart-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  <div class="fade-container">
+    <div v-for="SingleItem in Item">
+      <p class="name">
+        {{ SingleItem.Name }}
+      </p>
+      <div class="img-wrap">
         <img
           v-if="SingleItem.Name.includes('Burger')"
           src="../assets/pngwing.com(1).webp"
@@ -65,72 +178,107 @@ onMounted(() => {
         />
         <img
           v-if="SingleItem.Name.includes('Pizza')"
-          src="../assets/pngwing.com(10).webp"
+          src="../assets/pngwing.com(6).webp"
           alt=""
         />
-        <span
-          v-if="SingleItem.star"
-          class="star"
-          data-aos="fade-left"
-          data-aos-duration="700"
-        >
-          <i class="bi bi-star-fill"></i>
-        </span>
       </div>
-    </div>
-    <h5>Extras</h5>
-    <div data-aos="fade-left" data-aos-duration="700">
-      <swiper
-        :breakpoints="breakpoints.swiperOptions.breakpoints"
-        :space-between="20"
-        v-if="breakpoints"
-        class="slider"
-      >
-        <swiper-slide class="addons" @click="toggleCheck">
-          <div class="addons-card">
-            <img src="../assets/katchap.png" alt="" />
-            <p>Extra Katchap</p>
-            <span class="check">
-              <i class="bi bi-check-lg"></i>
-            </span>
-          </div>
-        </swiper-slide>
-        <swiper-slide class="addons" @click="toggleCheck">
-          <div class="addons-card">
-            <img src="../assets/cheese.png" alt="" />
-            <p>Extra Cheese</p>
-            <span class="check">
-              <i class="bi bi-check-lg"></i>
-            </span>
-          </div>
-        </swiper-slide>
-        <swiper-slide class="addons">
-          <div class="addons-card" @click="toggleCheck">
-            <img src="../assets/cheese.png" alt="" />
-            <p>Extra Cheese</p>
-            <span class="check">
-              <i class="bi bi-check-lg"></i>
-            </span>
-          </div>
-        </swiper-slide>
-      </swiper>
-    </div>
-    <div data-aos-offset="0" data-aos="fade-up" data-aos-duration="700">
-      <div class="add-to-cart">
-        <h1><span>$</span>{{ SingleItem.Price }}</h1>
-        <button>
-          <i class="bi bi-cart-plus"></i>
-        </button>
+      <h1>Restaurant</h1>
+      <div class="Order-Successful">
+        <i class="bi bi-check-circle-fill"></i>
+        <h4>Order Successful</h4>
+        <p>ET: 30 Minutes</p>
       </div>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
 @import "../assets/var.scss";
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+//qty button
+$black: #000;
+$white: #fff;
+$gray: #ccc;
+$smoke: #e2e2e2;
+$disable: #f2f2f2;
+
+.qty-input {
+  position: absolute;
+  bottom: 16px;
+  right: 0;
+  width: 65px;
+  height: 25px;
+  color: $white;
+  background: $mainColor;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  overflow: hidden;
+
+  .product-qty,
+  .qty-count {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: $mainColor;
+    color: inherit;
+    border: none;
+    min-width: 0;
+    height: 25px;
+    line-height: 1;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .product-qty {
+    font-size: 12px;
+    min-width: 0;
+    display: inline-block;
+    text-align: center;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+
+  .qty-count {
+    font-size: 16px;
+    padding: 0 10px;
+    cursor: pointer;
+    position: relative;
+
+    &:disabled {
+      color: $gray;
+      background: $disable;
+      cursor: not-allowed;
+      border: none;
+
+      &:before,
+      &:after {
+        background: $gray;
+      }
+    }
+  }
+}
+//item
 .item {
   height: calc(100vh - 81px);
   overflow: hidden;
   padding: 0 40px;
+  transition: all 1s ease;
   .wrapper {
     padding: 30px 0;
     .item-img {
@@ -229,7 +377,7 @@ onMounted(() => {
     margin-bottom: 50px;
     h1 {
       margin: 0;
-      font-size: 45px;
+      font-size: 40px;
       font-weight: bold;
       span {
         font-size: 25px;
@@ -240,9 +388,66 @@ onMounted(() => {
       background-color: $mainColor;
       color: #fff;
       border: none;
-      font-size: 22px;
+      font-size: 20px;
       padding: 10px 26px;
       border-radius: 16px;
+    }
+  }
+}
+.fade-container {
+  transition: all 1s ease;
+  opacity: 0;
+  .name {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 25%;
+    font-size: 30px;
+    color: $mainColor !important;
+    font-weight: bold;
+    text-wrap: nowrap;
+    text-align: center;
+  }
+  .img-wrap {
+    width: 200px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    img {
+      width: 100%;
+    }
+  }
+  h1 {
+    font-size: 18.5vw;
+    font-weight: 800;
+    z-index: -1;
+    position: absolute;
+    opacity: 0.5;
+    color: #e67068 !important;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 45%;
+  }
+  .Order-Successful {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 80%;
+    text-align: center;
+    text-wrap: nowrap;
+    i {
+      font-size: 70px;
+      background: #fff;
+      color: $mainColor;
+    }
+    h4 {
+      font-weight: bold;
+    }
+    p {
+      font-weight: 500;
+      font-size: 14px;
+      color: #979797 !important;
     }
   }
 }

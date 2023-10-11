@@ -1,11 +1,25 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from "vue";
+//router
+import { useRoute , useRouter} from "vue-router";
+const route = useRoute();
+const router = useRouter();
+const isItemRoute = computed(() => {
+  return route.path.match(/^\/Item\/\d+$/);
+});
+</script>
 <template>
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand d-flex" href="#"
+      <div v-if="isItemRoute" class="go-back" @click="router.go(-1)"><i class="bi bi-arrow-left-square-fill"></i></div>
+      <a
+        :class="isItemRoute ? 'center' : ''"
+        class="navbar-brand d-flex"
+        href="#"
         ><i class="bi bi-cup-straw"></i> <b>Fasfu</b></a
       >
       <button
+        v-if="!isItemRoute"
         class="navbar-toggler burger"
         type="button"
         data-bs-toggle="collapse"
@@ -69,26 +83,47 @@
 @import "../assets/var.scss";
 nav {
   padding: 25px 10px 10px 10px;
-  .navbar-brand {
-    color: #333;
-    font-size: 24px;
-    i {
-      font-size: 24px;
+  .container-fluid {
+    .go-back{
+      position: absolute;
+      font-size: 30px;
       color: $mainColor;
-      margin-left: -2px;
-      margin-right: 2px;
     }
-  }
-  .burger {
-    border: none !important;
-    box-shadow: none;
-    font-size: 30px;
-    color: $mainColor;
-    padding: 0;
-
-    &:focus {
+    .navbar-brand {
+      color: #333;
+      font-size: 24px;
+      &.center {
+        position: relative;
+        animation: anim 0.7s linear forwards;
+        @keyframes anim {
+          0% {
+            left: 0%;
+            transform: translateX(0%);
+          }
+          100% {
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
+      }
+      i {
+        font-size: 24px;
+        color: $mainColor;
+        margin-left: -2px;
+        margin-right: 2px;
+      }
+    }
+    .burger {
       border: none !important;
-      box-shadow: none !important;
+      box-shadow: none;
+      font-size: 30px;
+      color: $mainColor;
+      padding: 0;
+
+      &:focus {
+        border: none !important;
+        box-shadow: none !important;
+      }
     }
   }
 }

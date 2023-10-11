@@ -89,134 +89,147 @@ const goToItem = (event: { currentTarget: any }, Id: any) => {
   home.style.opacity = `0.5`;
   image.style.animation = `goToItem 0.4s linear forwards`;
   image.style.transform = `translate(-40%,-40%) scale(1.4)`;
-  router.push({ name: "Item", params: { id: Id } });
+  setTimeout(() => {
+    router.push({ name: "Item", params: { id: Id } });
+  }, 400);
 };
 </script>
 <template>
-  <div class="home-wrapper">
-    <div class="home">
-      <div class="container-fluid">
-        <h2>Order now</h2>
-        <p class="Welcom">What do you want to eat today?</p>
+  <transition name="fade" appear>
+    <div class="home-wrapper">
+      <div class="home">
+        <div class="container-fluid">
+          <h2>Order now</h2>
+          <p class="Welcom">What do you want to eat today?</p>
+        </div>
       </div>
-    </div>
-    <div class="wrapper">
-      <div class="slider container-fluid">
-        <swiper
-          :breakpoints="breakpoints.swiperOptions.breakpoints"
-          :space-between="30"
-          ref="slider"
-          v-if="breakpoints"
-        >
-          <swiper-slide class="item">
-            <div
-              class="box"
-              @click="active = 'Burger'"
-              :class="active == 'Burger' ? 'active' : ''"
-            >
-              <img src="../assets/pngwing.com(1).webp" alt="" />
-              <p>Burger</p>
-            </div>
-          </swiper-slide>
-          <swiper-slide class="item">
-            <div
-              class="box"
-              @click="active = 'Pizza'"
-              :class="active == 'Pizza' ? 'active' : ''"
-            >
-              <img src="../assets/pngwing.com(6).webp" alt="" />
-              <p>Pizza</p>
-            </div>
-          </swiper-slide>
-          <swiper-slide class="item">
-            <div
-              class="box"
-              @click="active = 'Others'"
-              :class="active == 'Others' ? 'active' : ''"
-            >
-              <img src="../assets/menu-item-1.webp" alt="" />
-              <p>Others</p>
-            </div>
-          </swiper-slide>
-        </swiper>
-        <p class="time text-center">Ready in <span>15</span> minutes!</p>
-      </div>
-      <div class="container-fluid">
-        <div class="food">
-          <div
-            v-for="Burger in Burgers"
-            class="food-cards Burger"
-            :class="active == 'Burger' ? 'show' : 'hide'"
-            @click="goToItem($event, Burger.id)"
+      <div class="wrapper">
+        <div class="slider container-fluid">
+          <swiper
+            :breakpoints="breakpoints.swiperOptions.breakpoints"
+            :space-between="30"
+            ref="slider"
+            v-if="breakpoints"
           >
-            <div class="card">
-              <div class="food-info">
-                <div class="content">
-                  <i v-if="Burger.star" class="bi bi-star-fill"></i>
-                  <div class="info">{{ Burger.Name }}</div>
-                </div>
-                <div class="badge bg-danger">${{ Burger.Price }}</div>
-              </div>
-              <div class="food-img">
-                <!-- <img :src="Burger.image" alt="" /> -->
+            <swiper-slide class="item">
+              <div
+                class="box"
+                @click="active = 'Burger'"
+                :class="active == 'Burger' ? 'active' : ''"
+              >
                 <img src="../assets/pngwing.com(1).webp" alt="" />
+                <p>Burger</p>
               </div>
-            </div>
-          </div>
-
-          <div class="Pizza-container">
+            </swiper-slide>
+            <swiper-slide class="item">
+              <div
+                class="box"
+                @click="active = 'Pizza'"
+                :class="active == 'Pizza' ? 'active' : ''"
+              >
+                <img src="../assets/pngwing.com(6).webp" alt="" />
+                <p>Pizza</p>
+              </div>
+            </swiper-slide>
+            <swiper-slide class="item">
+              <div
+                class="box"
+                @click="active = 'Others'"
+                :class="active == 'Others' ? 'active' : ''"
+              >
+                <img src="../assets/menu-item-1.webp" alt="" />
+                <p>Others</p>
+              </div>
+            </swiper-slide>
+          </swiper>
+          <p class="time text-center">Ready in <span>15</span> minutes!</p>
+        </div>
+        <div class="container-fluid">
+          <div class="food">
             <div
-              v-for="Pizza in Pizzas"
-              class="food-cards Pizza"
-              :class="active == 'Pizza' ? 'show' : 'hide'"
-              @click="goToItem($event, Pizza.id)"
+              v-for="Burger in Burgers"
+              class="food-cards Burger"
+              :class="active == 'Burger' ? 'show' : 'hide'"
+              @click="goToItem($event, Burger.id)"
             >
               <div class="card">
                 <div class="food-info">
                   <div class="content">
-                    <i v-if="Pizza.star" class="bi bi-star-fill"></i>
-                    <div class="info">{{ Pizza.Name }}</div>
+                    <i v-if="Burger.star" class="bi bi-star-fill"></i>
+                    <div class="info">{{ Burger.Name }}</div>
                   </div>
-                  <div class="badge bg-danger">${{ Pizza.Price }}</div>
+                  <div class="badge bg-danger">${{ Burger.Price }}</div>
                 </div>
                 <div class="food-img">
-                  <!-- <img :src="Pizza.image" alt="" /> -->
-                  <img src="../assets/pngwing.com(10).webp" alt="" />
+                  <!-- <img :src="Burger.image" alt="" /> -->
+                  <img src="../assets/pngwing.com(1).webp" alt="" />
+                </div>
+              </div>
+            </div>
+
+            <div class="Pizza-container">
+              <div
+                v-for="Pizza in Pizzas"
+                class="food-cards Pizza"
+                :class="active == 'Pizza' ? 'show' : 'hide'"
+                @click="goToItem($event, Pizza.id)"
+              >
+                <div class="card">
+                  <div class="food-info">
+                    <div class="content">
+                      <i v-if="Pizza.star" class="bi bi-star-fill"></i>
+                      <div class="info">{{ Pizza.Name }}</div>
+                    </div>
+                    <div class="badge bg-danger">${{ Pizza.Price }}</div>
+                  </div>
+                  <div class="food-img">
+                    <!-- <img :src="Pizza.image" alt="" /> -->
+                    <img src="../assets/pngwing.com(6).webp" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <img
+          :class="active == 'Burger' ? 'show' : 'hide'"
+          class="image1"
+          src="../assets/pngwing.com(1).webp"
+          alt=""
+        />
+        <img
+          :class="active == 'Burger' ? 'show' : 'hide'"
+          class="image2"
+          src="../assets/pngwing.com(2).webp"
+          alt=""
+        />
+        <img
+          :class="active == 'Pizza' ? 'show' : 'hide'"
+          class="image1"
+          src="../assets/pngwing.com(10).webp"
+          alt=""
+        />
+        <img
+          :class="active == 'Pizza' ? 'show' : 'hide'"
+          class="image2"
+          src="../assets/pngwing.com(8).webp"
+          alt=""
+        />
       </div>
-      <img
-        :class="active == 'Burger' ? 'show' : 'hide'"
-        class="image1"
-        src="../assets/pngwing.com(1).webp"
-        alt=""
-      />
-      <img
-        :class="active == 'Burger' ? 'show' : 'hide'"
-        class="image2"
-        src="../assets/pngwing.com(2).webp"
-        alt=""
-      />
-      <img
-        :class="active == 'Pizza' ? 'show' : 'hide'"
-        class="image1"
-        src="../assets/pngwing.com(10).webp"
-        alt=""
-      />
-      <img
-        :class="active == 'Pizza' ? 'show' : 'hide'"
-        class="image2"
-        src="../assets/pngwing.com(8).webp"
-        alt=""
-      />
     </div>
-  </div>
+  </transition>
 </template>
 <style lang="scss" scoped>
 @import "../assets/var.scss";
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .home-wrapper {
   overflow: hidden;
   height: calc(100vh - 81px);
